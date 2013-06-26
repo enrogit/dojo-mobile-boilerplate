@@ -23,6 +23,49 @@ LOADERCONF="$SRCDIR/$LOADERMID.js"
 # Main application package build configuration
 PROFILE="$BASEDIR/profiles/app.profile.js"
 
+# Take optional command line arguments in account
+
+while [ "$1" != "" ]; do
+  if [ "$2" != "" ]; then
+    case $1 in
+      -d )
+        DISTDIR="$(cd $(dirname $0) && mkdir -p $2 && cd $2 && pwd)"
+        ;; 
+
+      -s )
+        SRCDIR="$2"
+        ;;
+
+      -t )
+        TOOLSDIR="$2"
+        ;;
+
+      -c)
+        LOADERCONF="$2"
+        ;;
+
+      -p)
+        PROFILE="$2"
+        ;;
+
+    esac
+    shift 2
+  else 
+    case $1 in 
+      -h |--help )
+        echo "Available options :"
+        echo "-d DISTDIR    Destination directory for built code"
+        echo "-s SRCDIR     Source directory for unbuilt code"
+        echo "-t TOOLSDIR   Directory containing dojo build utilities"
+        echo "-c LOADERCONF Main application package loader configuration"
+        echo "-p PROFILE    Main application package build configuration"
+        exit
+        ;;
+    esac
+    shift 1
+  fi
+done
+
 # Configuration over. Main application start up!
 
 if [ ! -d "$TOOLSDIR" ]; then
@@ -39,7 +82,7 @@ echo " Done"
 cd "$TOOLSDIR"
 
 if which node >/dev/null; then
-	node ../../dojo/dojo.js load=build --require "$LOADERCONF" --profile "$PROFILE" --releaseDir "$DISTDIR" $@
+	node ../../dojo/dojo.js load=build --require "$LOADERCONF" --profile "$PROFILE" --releaseDir "${DISTDIR}" $@
 elif which java >/dev/null; then
 	java -Xms256m -Xmx256m  -cp ../shrinksafe/js.jar:../closureCompiler/compiler.jar:../shrinksafe/shrinksafe.jar org.mozilla.javascript.tools.shell.Main  ../../dojo/dojo.js baseUrl=../../dojo load=build --require "$LOADERCONF" --profile "$PROFILE" --releaseDir "$DISTDIR" $@
 else
