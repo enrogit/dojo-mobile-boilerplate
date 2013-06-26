@@ -59,4 +59,11 @@ perl -pe "
   s/<script src=\"$LOADERMID.*?\/script>//;  # Remove script app/run
   s/\s+/ /g;                                 # Collapse white-space" > "$DISTDIR/index.html"
 
+# Remove useless framework files
+find ${DISTDIR}/dojo -mindepth 1 -type d -exec rm -rf {} +
+find ${DISTDIR}/dojo -type f ! -name dojo.js -exec rm -f {} +
+
+rm -rf "${DISTDIR}/dojox"
+rm -rf "${DISTDIR}/dijit"
+rm -f "${DISTDIR}/build-report.txt"
 echo "Build complete"
