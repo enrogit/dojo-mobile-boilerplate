@@ -19,7 +19,7 @@
  */
 define([ 'dojo/has', 'require' ], function (has, require) {
 
-		require([ 'dojo/parser', 'dojo/domReady!' ], function (parser) {
+		require([ 'dojo/parser', 'dojox/mobile', 'dojo/domReady!' ], function (parser, dojoMobile) {
       parser.parse();
 		});
 	}
