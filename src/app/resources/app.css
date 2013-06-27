@@ -3,3 +3,7 @@
 body {
   visibility: hidden;
 }
+
+.mblView {
+  height: 100%;
+}
